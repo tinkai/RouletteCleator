@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
-    private final int MAX_VECTOR = 300;
     private GestureDetector gestureDetector; // フリックとか判定するやつ
     private RouletteView rouletteView;
 
@@ -47,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private final GestureDetector.SimpleOnGestureListener onGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            int vector = (int)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)));
-            if (vector > MAX_VECTOR) vector = MAX_VECTOR;
-            vector *= (int)vector*0.8;
+            float vector = (float)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)));
+
             VectorRotateAnimation animation = new VectorRotateAnimation(rouletteView, vector);
-            animation.setDuration(3000); // ミリ秒
+            animation.setDuration(10000); // ミリ秒 10秒
             animation.setFillAfter(true);
             rouletteView.startAnimation(animation);
             return false;

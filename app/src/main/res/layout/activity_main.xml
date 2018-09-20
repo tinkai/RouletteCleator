@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Roulette Name"
-        android:textSize="20sp"/>
+        android:textSize="24sp"/>
 
     <TextView
         android:id="@+id/result_view"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Result"
-        android:textSize="40sp"/>
+        android:textSize="50sp"/>
 
 
     <LinearLayout
