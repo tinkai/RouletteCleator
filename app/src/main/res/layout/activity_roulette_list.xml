@@ -7,6 +7,16 @@
     android:orientation="vertical"
     tools:context=".RouletteListActivity">
 
+    <ListView
+        android:id="@+id/roulette_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="New Create"/>
 
 </LinearLayout>
