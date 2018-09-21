@@ -1,5 +1,6 @@
 package com.tinkai.myroulette;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, com.tinkai.myroulette.RouletteListActivity.class);
+                startActivity(intent);
             }
         });
     }
