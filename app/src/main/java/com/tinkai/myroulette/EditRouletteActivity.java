@@ -165,7 +165,7 @@ public class EditRouletteActivity extends AppCompatActivity {
         ));
 
         EditText nameEditText = new EditText(this);
-        nameEditText.setText("Name");
+        nameEditText.setHint("Name");
         itemLayout.addView(nameEditText, new LinearLayout.LayoutParams(
                 0,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -174,7 +174,7 @@ public class EditRouletteActivity extends AppCompatActivity {
         this.itemNameList.add(nameEditText);
 
         EditText ratioEditText = new EditText(this);
-        ratioEditText.setText("Ratio");
+        ratioEditText.setHint("Ratio");
         itemLayout.addView(ratioEditText, new LinearLayout.LayoutParams(
                 0,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
