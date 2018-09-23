@@ -46,17 +46,6 @@ public class RouletteListActivity extends AppCompatActivity {
             db.close();
         }
 
-        // 仮データ
-        /*
-        ArrayList<HashMap<String, String>> tmpList = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            HashMap<String, String> data = new HashMap<>();
-            data.put("name", "サンプルデータ"+i);
-            data.put("id", "sampleID"+i);
-            tmpList.add(data);
-        }
-        */
-
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,
                 rouletteList,
                 android.R.layout.simple_list_item_2,
