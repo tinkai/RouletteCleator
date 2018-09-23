@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,6 @@ public class EditRouletteActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         id = intent.getStringExtra("id");
-
         if (id.equals("")) {
             // 新規作成
             newFlag = true;
@@ -49,13 +49,10 @@ public class EditRouletteActivity extends AppCompatActivity {
             SQLiteDatabase db = helper.getWritableDatabase();
             try {
                 Cursor c = db.rawQuery("select name from ROULETTE_TABLE where uuid = '" + id + "'", null);
-                boolean next = c.moveToFirst();
-                while (next) {
-                    String name = c.getString(0);
-                    EditText nameEdit = findViewById(R.id.roulette_name_edit);
-                    nameEdit.setText(name, TextView.BufferType.NORMAL);
-                    next = c.moveToNext();
-                }
+                c.moveToFirst();
+                String name = c.getString(0);
+                EditText nameEdit = findViewById(R.id.roulette_name_edit);
+                nameEdit.setText(name, TextView.BufferType.NORMAL);
             } finally {
                 db.close();
             }
@@ -73,17 +70,15 @@ public class EditRouletteActivity extends AppCompatActivity {
                 Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
                 c.moveToFirst();
                 String rouletteID = String.valueOf(c.getInt(0));
+
                 c = db.rawQuery("select name, ratio from ROULETTE_ITEM_TABLE" + rouletteID, null);
                 boolean next = c.moveToFirst();
                 while (next) {
                     String itemName = c.getString(0);
                     String itemRatio = c.getString(1);
-                    Log.d("log", "==================" + itemName);
-                    Log.d("log", "==================" + itemRatio);
                     addItemList();
-                    Log.d("log", "==================" + this.itemNameList.size() + " " + this.itemRatioList.size());
-                    this.itemNameList.get(this.itemNameList.size()-1).setText(itemName);
-                    this.itemRatioList.get(this.itemRatioList.size()-1).setText(itemRatio);
+                    this.itemNameList.get(this.itemNameList.size()-1).setText(itemName, TextView.BufferType.NORMAL);
+                    this.itemRatioList.get(this.itemRatioList.size()-1).setText(itemRatio, TextView.BufferType.NORMAL);
                     next = c.moveToNext();
                 }
             } finally {
@@ -102,13 +97,27 @@ public class EditRouletteActivity extends AppCompatActivity {
             }
         });
 
-        final Button registerButton = findViewById(R.id.register_button);
+        Button deleteItemButton = findViewById(R.id.delete_button);
+        deleteItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteItemList();
+            }
+        });
+
+        Button registerButton = findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isOkItemRatio()) {
+                    EditRouletteErrorDialogFlagment dialog = new EditRouletteErrorDialogFlagment();
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
                 EditText nameEdit = findViewById(R.id.roulette_name_edit);
                 String name = nameEdit.getText().toString();
 
+                // DB登録
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try {
                     if (newFlag) {
@@ -118,21 +127,21 @@ public class EditRouletteActivity extends AppCompatActivity {
                         Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
                         c.moveToFirst();
                         String rouletteID = String.valueOf(c.getInt(0));
-                        Log.d("log", "=================Roulette" + rouletteID);
+
                         db.execSQL("CREATE TABLE ROULETTE_ITEM_TABLE" + rouletteID + "(" +
                                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                 "name TEXT, " +
                                 "ratio TEXT)");
-                        registerItemList(db);
+                        registerItemTable(db, rouletteID);
                     } else {
                         db.execSQL("update ROULETTE_TABLE set name = '" + name + "' where uuid = '" + id + "'");
+
                         Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
                         c.moveToFirst();
                         String rouletteID = String.valueOf(c.getInt(0));
-                        Log.d("log", "=================Roulette" + rouletteID);
+
                         db.execSQL("delete from ROULETTE_ITEM_TABLE" + rouletteID);
-                        Log.d("log", "=================1");
-                        registerItemList(db);
+                        registerItemTable(db, rouletteID);
                     }
                 } finally {
                     db.close();
@@ -145,6 +154,8 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private void addItemList() {
+        if (this.itemList.size() >= 10) return;
+
         LinearLayout itemListLayout = findViewById(R.id.item_list);
 
         LinearLayout itemLayout = new LinearLayout(this);
@@ -156,8 +167,8 @@ public class EditRouletteActivity extends AppCompatActivity {
         this.itemList.add(itemLayout);
 
         TextView numText = new TextView(this);
-        String num = String.valueOf(this.itemNameList.size());
-        numText.setText(String.valueOf(this.itemNameList.size()+1) + ".");
+        String strNum = String.valueOf(this.itemList.size());
+        numText.setText(strNum + ".");
         itemLayout.addView(numText, new LinearLayout.LayoutParams(
                 0,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -182,49 +193,53 @@ public class EditRouletteActivity extends AppCompatActivity {
         ));
         this.itemRatioList.add(ratioEditText);
 
-        Button deleteButton = new Button(this);
-        deleteButton.setText("Del");
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        itemLayout.addView(deleteButton, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                2
-        ));
-
         itemListLayout.addView(itemLayout);
-
-        /*
-        for (int i = 0; i < this.itemNameList.size(); i++) {
-            Log.d("log", String.valueOf(this.itemNameList.get(i).getText()));
-            Log.d("log", String.valueOf(this.itemRatioList.get(i).getText()));
-        }
-        */
     }
 
-    private void registerItemList(SQLiteDatabase db) {
-        try {
-            Log.d("log", "=================" + id);
-            Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
+    protected void deleteItemList() {
+        if (this.itemList.size() <= 2) return;
+        int last = this.itemList.size()-1;
+        this.itemNameList.remove(last);
+        this.itemRatioList.remove(last);
+        this.itemList.get(last).removeAllViews();
+        this.itemList.remove(last);
+    }
 
-            c.moveToFirst();
-            String rouletteID = String.valueOf(c.getInt(0));
-            Log.d("log", "=================" + rouletteID);
+    private void registerItemTable(SQLiteDatabase db, String rouletteID) {
+        try {
             for (int i = 0; i < this.itemNameList.size(); i++) {
                 String itemName = String.valueOf(this.itemNameList.get(i).getText());
                 String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
-                Log.d("log", "=================" + i);
-                Log.d("log", "=================Roulette" + rouletteID);
-                Log.d("log", "=================" + itemName + " " + itemRatio);
-                db.execSQL("insert into ROULETTE_ITEM_TABLE" + rouletteID + "(name, ratio) VALUES('" + itemName + "', '" + itemRatio + "')");
+                if (!itemName.equals("")) {
+                    db.execSQL("insert into ROULETTE_ITEM_TABLE" + rouletteID + "(name, ratio) VALUES('" + itemName + "', '" + itemRatio + "')");
+                }
             }
         } finally {
             db.close();
         }
+    }
+
+    private boolean isOkItemRatio() {
+        // 数字か判定、値も
+        for (int i = 0; i < this.itemNameList.size(); i++) {
+            String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
+            try {
+                int num = Integer.parseInt(itemRatio);
+                if (num <= 0 || num >= 100) return false;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+        // 合計100か
+        int sum = 0;
+        for (int i = 0; i < this.itemNameList.size(); i++) {
+            String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
+            int num = Integer.parseInt(itemRatio);
+            sum += num;
+        }
+        if (sum != 100) return false;
+
+        return true;
     }
 
 }
