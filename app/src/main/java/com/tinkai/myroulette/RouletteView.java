@@ -7,24 +7,45 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class RouletteView extends View {
     private Paint paint;
     private Paint textPaint;
-    private int color[] = {Color.RED, Color.GREEN, Color.BLUE}; // 仮設定
-    private String name[] = {"あああああ", "いいいいい", "ううううう"};
+    private int color[] = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY,
+            Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY}; // 仮設定
+    private String name[];
     private int num; // 項目数
     private int angle; // 一つの項目の角度
     private float rotationAngle; // 回転速度
 
-    // 最終的にsettingクラスから設定を行うコンストラクタを作成する
-    RouletteView(Context context, int num) {
+    RouletteView(Context context) {
         super(context);
         this.paint = new Paint();
         this.paint.setAntiAlias(true);
         this.textPaint = new Paint();
         this.textPaint.setAntiAlias(true);
         this.textPaint.setTextSize(70);
+    }
+
+    // 最終的にsettingクラスから設定を行うコンストラクタを作成する
+    RouletteView(Context context, int num) {
+        this(context);
+        this.name = new String[3];
+        this.name[0] = "aaa";
+        this.name[1] = "bbb";
+        this.name[2] = "ccc";
         this.num = num;
+        this.angle = 360 / num;
+    }
+
+    RouletteView(Context context, ArrayList<String> nameList) {
+        this(context);
+        this.num = nameList.size();
+        this.name = new String[nameList.size()];
+        for (int i = 0; i < nameList.size(); i++) {
+            this.name[i] = nameList.get(i);
+        }
         this.angle = 360 / num;
     }
 

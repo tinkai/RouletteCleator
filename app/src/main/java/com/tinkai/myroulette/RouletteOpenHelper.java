@@ -17,7 +17,9 @@ public class RouletteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE ROULETTE_TABLE (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "uuid TEXT, " +
-                "name TEXT)");
+                "name TEXT, " +
+                "use INTEGER )");
+        //NOT NULL DEFAULT '0'
     }
 
     @Override

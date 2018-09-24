@@ -109,8 +109,9 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (!isOkItemRatio()) {
-                    EditRouletteErrorDialogFlagment dialog = new EditRouletteErrorDialogFlagment();
+                    EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
@@ -121,8 +122,9 @@ public class EditRouletteActivity extends AppCompatActivity {
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try {
                     if (newFlag) {
+                        db.execSQL("update ROULETTE_TABLE set use = '0'");
                         id = UUID.randomUUID().toString();
-                        db.execSQL("insert into ROULETTE_TABLE(uuid, name) VALUES('" + id + "', '" + name + "')");
+                        db.execSQL("insert into ROULETTE_TABLE(uuid, name, use) VALUES('" + id + "', '" + name + "', '1')");
 
                         Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
                         c.moveToFirst();
@@ -134,7 +136,8 @@ public class EditRouletteActivity extends AppCompatActivity {
                                 "ratio TEXT)");
                         registerItemTable(db, rouletteID);
                     } else {
-                        db.execSQL("update ROULETTE_TABLE set name = '" + name + "' where uuid = '" + id + "'");
+                        db.execSQL("update ROULETTE_TABLE set use = '0'");
+                        db.execSQL("update ROULETTE_TABLE set name = '" + name + "', use = '1' where uuid = '" + id + "'");
 
                         Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
                         c.moveToFirst();
