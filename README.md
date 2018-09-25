@@ -7,3 +7,4 @@ MyRoulette
 DB:https://high-programmer.com/2017/09/04/android-studio-memo-app-4/#i-3 (2018/9/20)  
 ダイアログ表示:https://high-programmer.com/2017/07/28/android-studio-dialog/ (2018/9/24)  
 アダプター:https://qiita.com/mizofumi0411/items/fd51dea947f2e65f534b (2018/9/24)  
+キャンバス:https://tech.recruit-mp.co.jp/mobile/remember_canvas1/ (2018/9/26)  
