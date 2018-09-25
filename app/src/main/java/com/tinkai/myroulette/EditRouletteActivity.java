@@ -109,48 +109,20 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!isOkItemRatio()) {
-                    EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
-                    dialog.show(getSupportFragmentManager(), "caution");
-                    return;
-                }
-                EditText nameEdit = findViewById(R.id.roulette_name_edit);
-                String name = nameEdit.getText().toString();
-
-                // DB登録
-                SQLiteDatabase db = helper.getWritableDatabase();
-                try {
-                    if (newFlag) {
-                        db.execSQL("update ROULETTE_TABLE set use = '0'");
-                        id = UUID.randomUUID().toString();
-                        db.execSQL("insert into ROULETTE_TABLE(uuid, name, use) VALUES('" + id + "', '" + name + "', '1')");
-
-                        Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
-                        c.moveToFirst();
-                        String rouletteID = String.valueOf(c.getInt(0));
-
-                        db.execSQL("CREATE TABLE ROULETTE_ITEM_TABLE" + rouletteID + "(" +
-                                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "name TEXT, " +
-                                "ratio TEXT)");
-                        registerItemTable(db, rouletteID);
-                    } else {
-                        db.execSQL("update ROULETTE_TABLE set use = '0'");
-                        db.execSQL("update ROULETTE_TABLE set name = '" + name + "', use = '1' where uuid = '" + id + "'");
-
-                        Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
-                        c.moveToFirst();
-                        String rouletteID = String.valueOf(c.getInt(0));
-
-                        db.execSQL("delete from ROULETTE_ITEM_TABLE" + rouletteID);
-                        registerItemTable(db, rouletteID);
-                    }
-                } finally {
-                    db.close();
-                }
+                register();
 
                 Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.myroulette.RouletteListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button useButton = findViewById(R.id.use_button);
+        useButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                register();
+
+                Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.myroulette.MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -206,6 +178,48 @@ public class EditRouletteActivity extends AppCompatActivity {
         this.itemRatioList.remove(last);
         this.itemList.get(last).removeAllViews();
         this.itemList.remove(last);
+    }
+
+    protected void register() {
+        if (!isOkItemRatio()) {
+            EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
+            dialog.show(getSupportFragmentManager(), "caution");
+            return;
+        }
+        EditText nameEdit = findViewById(R.id.roulette_name_edit);
+        String name = nameEdit.getText().toString();
+
+        // DB登録
+        SQLiteDatabase db = helper.getWritableDatabase();
+        try {
+            if (newFlag) {
+                db.execSQL("update ROULETTE_TABLE set use = '0'");
+                id = UUID.randomUUID().toString();
+                db.execSQL("insert into ROULETTE_TABLE(uuid, name, use) VALUES('" + id + "', '" + name + "', '1')");
+
+                Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
+                c.moveToFirst();
+                String rouletteID = String.valueOf(c.getInt(0));
+
+                db.execSQL("CREATE TABLE ROULETTE_ITEM_TABLE" + rouletteID + "(" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name TEXT, " +
+                        "ratio TEXT)");
+                registerItemTable(db, rouletteID);
+            } else {
+                db.execSQL("update ROULETTE_TABLE set use = '0'");
+                db.execSQL("update ROULETTE_TABLE set name = '" + name + "', use = '1' where uuid = '" + id + "'");
+
+                Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + id + "'", null);
+                c.moveToFirst();
+                String rouletteID = String.valueOf(c.getInt(0));
+
+                db.execSQL("delete from ROULETTE_ITEM_TABLE" + rouletteID);
+                registerItemTable(db, rouletteID);
+            }
+        } finally {
+            db.close();
+        }
     }
 
     private void registerItemTable(SQLiteDatabase db, String rouletteID) {
