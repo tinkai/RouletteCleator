@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         this.gestureDetector = new GestureDetector(this, this.onGestureListener);
 
         LinearLayout rouletteLayout = findViewById(R.id.roulette_layout);
+        TextView resultView = findViewById(R.id.result_view);
 
         if (helper == null) {
             helper = new RouletteOpenHelper(MainActivity.this);
@@ -40,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
             Cursor c = db.rawQuery("select id, uuid, name from ROULETTE_TABLE where use = 1", null);
             boolean next = c.moveToFirst();
             if (!next) {
-                this.rouletteView = new RouletteView(this, 3); // testように3個
+                String[] nameArray = {"1", "2", "3", "4", "5", "6"};
+                this.rouletteView = new RouletteView(this, resultView, 3); // testように3個
             } else {
                 String name = c.getString(2);
                 TextView rouletteNameView = findViewById(R.id.roulette_name_view);
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String uuid = c.getString(1);
                 ArrayList<String> nameList = new ArrayList<>();
-                //String itemName[] = new
+                ArrayList<String> ratioList = new ArrayList<>();
 
                 String rouletteID = String.valueOf(c.getInt(0));
                 c = db.rawQuery("select name, ratio from ROULETTE_ITEM_TABLE" + rouletteID, null);
@@ -57,9 +61,17 @@ public class MainActivity extends AppCompatActivity {
                     String itemName = c.getString(0);
                     String itemRatio = c.getString(1);
                     nameList.add(itemName);
+                    ratioList.add(itemRatio);
                     nextItem = c.moveToNext();
                 }
-                this.rouletteView = new RouletteView(this, nameList);
+
+                String[] nameArray = new String[nameList.size()];
+                String[] ratioArray = new String[ratioList.size()];
+                for (int i = 0; i < nameList.size(); i++) {
+                    nameArray[i] = nameList.get(i);
+                    ratioArray[i] = ratioList.get(i);
+                }
+                this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
             }
         } finally {
             db.close();
@@ -91,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             float vector = (float)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)));
 
             VectorRotateAnimation animation = new VectorRotateAnimation(rouletteView, vector);
-            animation.setDuration(10000); // ミリ秒 10秒
+            animation.setDuration(15000); // ミリ秒 15秒
             animation.setFillAfter(true);
             rouletteView.startAnimation(animation);
             return false;
