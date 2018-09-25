@@ -50,11 +50,6 @@ public class RouletteListActivity extends AppCompatActivity {
                 HashMap<String, String> data = new HashMap<>();
                 String uuid = c.getString(0);
                 String name = c.getString(1);
-                int use = c.getInt(2);
-                if (use == 1) {
-                    Log.d("log", "==================");
-                    Log.d("log", uuid + " =========== " + name);
-                }
                 data.put("name", name);
                 data.put("id", uuid);
                 rouletteList.add(data);
