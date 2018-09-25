@@ -109,6 +109,12 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isOkItemRatio()) {
+                    EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
+
                 register();
 
                 Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.myroulette.RouletteListActivity.class);
@@ -120,6 +126,12 @@ public class EditRouletteActivity extends AppCompatActivity {
         useButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isOkItemRatio()) {
+                    EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
+
                 register();
 
                 Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.myroulette.MainActivity.class);
@@ -181,11 +193,6 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     protected void register() {
-        if (!isOkItemRatio()) {
-            EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
-            dialog.show(getSupportFragmentManager(), "caution");
-            return;
-        }
         EditText nameEdit = findViewById(R.id.roulette_name_edit);
         String name = nameEdit.getText().toString();
 
