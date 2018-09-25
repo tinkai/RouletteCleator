@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
+import android.support.annotation.ColorRes;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -23,7 +25,7 @@ public class RouletteView extends View {
     private int ratio[];
     private int num; // 項目数
     private float angle[]; // 一つの項目の角度
-    private float rotationAngle; // 回転速度
+    private float rotationAngle; // 回転した角度
 
     RouletteView(Context context, TextView resultView) {
         super(context);
@@ -33,19 +35,6 @@ public class RouletteView extends View {
         this.textPaint.setAntiAlias(true);
         this.textPaint.setTextSize(70);
         this.resultView = resultView;
-    }
-
-    // 最終的にsettingクラスから設定を行うコンストラクタを作成する
-    RouletteView(Context context, TextView resultView, int num) {
-        this(context, resultView);
-        this.name = new String[3];
-        this.name[0] = "aaa";
-        this.name[1] = "bbb";
-        this.name[2] = "ccc";
-        this.num = num;
-        this.angle[0] = 360 / num;
-        this.angle[1] = 360 / num;
-        this.angle[2] = 360 / num;
     }
 
     RouletteView(Context context, TextView resultView, String[] nameArray, String[] ratioArray) {
@@ -69,14 +58,31 @@ public class RouletteView extends View {
         RectF rectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 
         // ルーレット描写
-        float sumAngle = 0.0f;
+        float rotateAngle = this.rotationAngle;
+        float sumAngle = (this.rotationAngle + 90) % 360;
+        //boolean isResult = true;
         for (int i = 0; i < this.num; i++) {
             this.paint.setColor(color[i]);
-            canvas.drawArc(rectF, sumAngle + this.rotationAngle, this.angle[i], true, this.paint);
+            canvas.drawArc(rectF, rotateAngle, this.angle[i], true, this.paint);
+            rotateAngle += this.angle[i];
+
             sumAngle += this.angle[i];
+            if (sumAngle > 360) {
+                this.resultView.setText(this.name[i]);
+                sumAngle = sumAngle % 360;
+            }
         }
+
+        // 下矢印
+        this.paint.setColor(Color.BLACK);
+        Path path = new Path();
+        path.moveTo(centerX, centerY - radius + radius*0.1f);
+        path.lineTo(centerX - radius*0.1f,centerY - radius - radius*0.1f);
+        path.lineTo(centerX + radius*0.1f,centerY - radius - radius*0.1f);
+        path.close();
+        canvas.drawPath(path,paint);
+
         // ルーレットアイテム名表示 分離させないと変な表示になる
-        float canvasRotateValue = 0.0f;
         for (int i = 0; i < this.num; i++) {
             float textAngle;
             if(i == 0) {
@@ -86,12 +92,6 @@ public class RouletteView extends View {
             }
             canvas.rotate(textAngle, centerX, centerY);
             canvas.drawText(this.name[i], centerX - 30, centerY - radius/2, this.textPaint);
-            /*
-            canvasRotateValue += this.angle[i];
-            if ((int)canvasRotateValue > 359) {
-                this.resultView.setText(this.name[i]);
-            }
-            */
         }
 
 
