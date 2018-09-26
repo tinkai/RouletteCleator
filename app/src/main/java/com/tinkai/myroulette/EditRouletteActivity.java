@@ -109,8 +109,14 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isOkName()) {
+                    NameCautionDialog dialog = new NameCautionDialog();
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
+
                 if (!isOkItemRatio()) {
-                    EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
+                    RatioCautionDialog dialog = new RatioCautionDialog();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
@@ -126,8 +132,14 @@ public class EditRouletteActivity extends AppCompatActivity {
         useButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isOkName()) {
+                    NameCautionDialog dialog = new NameCautionDialog();
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
+
                 if (!isOkItemRatio()) {
-                    EditRouletteCautionDialogFragment dialog = new EditRouletteCautionDialogFragment();
+                    RatioCautionDialog dialog = new RatioCautionDialog();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
@@ -244,24 +256,34 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private boolean isOkItemRatio() {
-        // 数字か判定、値も
-        for (int i = 0; i < this.itemNameList.size(); i++) {
-            String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
+        int sum = 0;
+        for (EditText ratioText : this.itemRatioList) {
+            String ratio = String.valueOf(ratioText.getText());
+            // 数字か
             try {
-                int num = Integer.parseInt(itemRatio);
+                int num = Integer.parseInt(ratio);
                 if (num <= 0 || num >= 100) return false;
+
+                sum += num;
             } catch (NumberFormatException e) {
                 return false;
             }
         }
-        // 合計100か
-        int sum = 0;
-        for (int i = 0; i < this.itemNameList.size(); i++) {
-            String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
-            int num = Integer.parseInt(itemRatio);
-            sum += num;
-        }
+        // 合計が100か
         if (sum != 100) return false;
+
+        return true;
+    }
+
+    private boolean isOkName() {
+        EditText rouletteNameText = findViewById(R.id.roulette_name_edit);
+        String rouletteName = String.valueOf(rouletteNameText.getText());
+        if (rouletteName.equals("")) return false;
+
+        for (EditText nameText : this.itemNameList) {
+            String name = String.valueOf(nameText.getText());
+            if (name.equals("")) return false;
+        }
 
         return true;
     }
