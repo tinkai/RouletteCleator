@@ -29,7 +29,6 @@ public class RouletteListActivity extends AppCompatActivity {
             helper = new RouletteOpenHelper(RouletteListActivity.this);
         }
 
-        final ArrayList<HashMap<String, String>> rouletteList = new ArrayList<>();
         SQLiteDatabase db = helper.getWritableDatabase();
         /* DB削除したい時用
         db.execSQL("DROP TABLE IF EXISTS ROULETTE_TABLE");
@@ -43,15 +42,16 @@ public class RouletteListActivity extends AppCompatActivity {
         }
         helper.onCreate(db);
         */
+        final ArrayList<RouletteInfo> rouletteList = new ArrayList<>();
         try {
             Cursor c = db.rawQuery("select uuid, name, use from ROULETTE_TABLE order by id", null);
             boolean next = c.moveToFirst();
             while (next) {
-                HashMap<String, String> data = new HashMap<>();
+                RouletteInfo data = new RouletteInfo();
                 String uuid = c.getString(0);
                 String name = c.getString(1);
-                data.put("name", name);
-                data.put("id", uuid);
+                data.setUuid(uuid);
+                data.setName(name);
                 rouletteList.add(data);
                 next = c.moveToNext();
             }
@@ -59,28 +59,21 @@ public class RouletteListActivity extends AppCompatActivity {
             db.close();
         }
 
-        final SimpleAdapter simpleAdapter = new SimpleAdapter(this,
-                rouletteList,
-                android.R.layout.simple_list_item_2,
-                new String[]{"name", "id"},
-                new int[]{android.R.id.text1, android.R.id.text2}
-                );
+        final RouletteListAdapter rouletteListAdapter = new RouletteListAdapter(this);
+        rouletteListAdapter.setRouletteList(rouletteList);
 
         ListView rouletteView = findViewById(R.id.roulette_list);
-        rouletteView.setAdapter(simpleAdapter);
+        rouletteView.setAdapter(rouletteListAdapter);
 
         rouletteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.EditRouletteActivity.class);
 
-                // 選択されたビューを取得 TwoLineListItemを取得した後、text2の値を取得する
-                TwoLineListItem two = (TwoLineListItem)view;
-                TextView idTextView = (TextView)two.getText2();
-                String isStr = (String) idTextView.getText();
-                // 値を引き渡す (識別名, 値)の順番で指定します
-                intent.putExtra("id", isStr);
-                // Activity起動
+                RouletteInfo rouletteInfo = (RouletteInfo) rouletteListAdapter.getItem(position);
+                String uuid = rouletteInfo.getUuid();
+
+                intent.putExtra("id", uuid);
                 startActivity(intent);
             }
         });
@@ -88,28 +81,26 @@ public class RouletteListActivity extends AppCompatActivity {
         rouletteView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TwoLineListItem two = (TwoLineListItem)view;
-                TextView idTextView = two.getText2();
-                String idStr = (String) idTextView.getText();
+                RouletteInfo rouletteInfo = (RouletteInfo) rouletteListAdapter.getItem(position);
+                String uuid = rouletteInfo.getUuid();
 
                 SQLiteDatabase db = helper.getWritableDatabase();
                 try {
-                    Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + idStr + "'", null);
+                    Cursor c = db.rawQuery("select id from ROULETTE_TABLE where uuid = '" + uuid + "'", null);
                     c.moveToFirst();
                     String rouletteID = String.valueOf(c.getInt(0));
                     db.execSQL("DROP TABLE ROULETTE_ITEM_TABLE" + rouletteID);
 
-                    db.execSQL("DELETE FROM ROULETTE_TABLE WHERE uuid = '"+ idStr +"'");
+                    db.execSQL("DELETE FROM ROULETTE_TABLE WHERE uuid = '"+ uuid +"'");
                 } finally {
                     db.close();
                 }
 
                 rouletteList.remove(position);
-                simpleAdapter.notifyDataSetChanged();
+                rouletteListAdapter.notifyDataSetChanged();
                 return true;
             }
         });
-
 
         Button createButton = findViewById(R.id.create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
