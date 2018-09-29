@@ -1,5 +1,6 @@
 package com.tinkai.myroulette;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,9 +26,8 @@ public class EditRouletteActivity extends AppCompatActivity {
     RouletteOpenHelper helper = null;
     private boolean newFlag = false;
     private String id = "";
-    private ArrayList<LinearLayout> itemList;
-    private ArrayList<EditText> itemNameList;
-    private ArrayList<EditText> itemRatioList;
+    private ArrayList<ItemInfo> itemList;
+    private ItemListAdapter itemListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +59,13 @@ public class EditRouletteActivity extends AppCompatActivity {
         }
 
         // itemList
+        ListView itemListView = findViewById(R.id.item_list_view);
+
         this.itemList = new ArrayList<>();
-        this.itemNameList = new ArrayList<>();
-        this.itemRatioList = new ArrayList<>();
+        this.itemListAdapter = new ItemListAdapter(this);
+        this.itemListAdapter.setItemList(this.itemList);
+        itemListView.setAdapter(this.itemListAdapter);
+
         if (id.equals("")) {
             addItemList();
         } else {
@@ -77,8 +81,9 @@ public class EditRouletteActivity extends AppCompatActivity {
                     String itemName = c.getString(0);
                     String itemRatio = c.getString(1);
                     addItemList();
-                    this.itemNameList.get(this.itemNameList.size()-1).setText(itemName, TextView.BufferType.NORMAL);
-                    this.itemRatioList.get(this.itemRatioList.size()-1).setText(itemRatio, TextView.BufferType.NORMAL);
+                    ItemInfo item = this.itemList.get(this.itemList.size()-1);
+                    item.setName(itemName);
+                    item.setRatio(itemRatio);
                     next = c.moveToNext();
                 }
             } finally {
@@ -155,53 +160,17 @@ public class EditRouletteActivity extends AppCompatActivity {
     private void addItemList() {
         if (this.itemList.size() >= 10) return;
 
-        LinearLayout itemListLayout = findViewById(R.id.item_list);
+        ItemInfo item = new ItemInfo();
+        this.itemList.add(item);
 
-        LinearLayout itemLayout = new LinearLayout(this);
-        itemLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-        itemLayout.setOrientation(LinearLayout.HORIZONTAL);
-        this.itemList.add(itemLayout);
-
-        TextView numText = new TextView(this);
-        String strNum = String.valueOf(this.itemList.size());
-        numText.setText(strNum + ".");
-        itemLayout.addView(numText, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                1
-        ));
-
-        EditText nameEditText = new EditText(this);
-        nameEditText.setHint("Name");
-        itemLayout.addView(nameEditText, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                6
-        ));
-        this.itemNameList.add(nameEditText);
-
-        EditText ratioEditText = new EditText(this);
-        ratioEditText.setHint("Ratio");
-        itemLayout.addView(ratioEditText, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                2
-        ));
-        this.itemRatioList.add(ratioEditText);
-
-        itemListLayout.addView(itemLayout);
+        this.itemListAdapter.notifyDataSetChanged();
     }
 
     protected void deleteItemList() {
         if (this.itemList.size() <= 2) return;
-        int last = this.itemList.size()-1;
-        this.itemNameList.remove(last);
-        this.itemRatioList.remove(last);
-        this.itemList.get(last).removeAllViews();
-        this.itemList.remove(last);
+
+        this.itemList.remove(this.itemList.size()-1);
+        this.itemListAdapter.notifyDataSetChanged();
     }
 
     protected void register() {
@@ -242,16 +211,10 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private void registerItemTable(SQLiteDatabase db, String rouletteID) {
-        try {
-            for (int i = 0; i < this.itemNameList.size(); i++) {
-                String itemName = String.valueOf(this.itemNameList.get(i).getText());
-                String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
-                if (!itemName.equals("")) {
-                    db.execSQL("insert into ROULETTE_ITEM_TABLE" + rouletteID + "(name, ratio) VALUES('" + itemName + "', '" + itemRatio + "')");
-                }
-            }
-        } finally {
-            db.close();
+        for (ItemInfo item : this.itemList) {
+            String name = item.getName();
+            String ratio = item.getRatio();
+            db.execSQL("insert into ROULETTE_ITEM_TABLE" + rouletteID + "(name, ratio) VALUES('" + name + "', '" + ratio + "')");
         }
     }
 
@@ -259,8 +222,8 @@ public class EditRouletteActivity extends AppCompatActivity {
         if (isAllEmptyRatio()) return true;
 
         int sum = 0;
-        for (EditText ratioText : this.itemRatioList) {
-            String ratio = String.valueOf(ratioText.getText());
+        for (ItemInfo item : this.itemList) {
+            String ratio = item.getRatio();
             // 数字か
             try {
                 int num = Integer.parseInt(ratio);
@@ -273,13 +236,12 @@ public class EditRouletteActivity extends AppCompatActivity {
         }
         // 合計が100か
         if (sum != 100) return false;
-
         return true;
     }
 
     private boolean isAllEmptyRatio() {
-        for (EditText ratioText : this.itemRatioList) {
-            String ratio = String.valueOf(ratioText.getText());
+        for (ItemInfo item : this.itemList) {
+            String ratio = item.getRatio();
             if (!ratio.equals("")) return false;
         }
         return true;
@@ -290,12 +252,10 @@ public class EditRouletteActivity extends AppCompatActivity {
         String rouletteName = String.valueOf(rouletteNameText.getText());
         if (rouletteName.equals("")) return false;
 
-        for (EditText nameText : this.itemNameList) {
-            String name = String.valueOf(nameText.getText());
+        for (ItemInfo item : this.itemList) {
+            String name = item.getName();
             if (name.equals("")) return false;
         }
-
         return true;
     }
-
 }
