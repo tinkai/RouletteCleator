@@ -97,10 +97,8 @@ public class RouletteView extends View {
                 textAngle = (this.angle[i-1] + this.angle[i]) / 2;
             }
             canvas.rotate(textAngle, centerX, centerY);
-            canvas.drawText(this.name[i], centerX - 30, centerY - radius/2, this.textPaint);
+            canvas.drawText(this.name[i], centerX - 30, centerY - 3*radius/5, this.textPaint);
         }
-
-
     }
 
     public void addRotationAngle(float rotation) {
