@@ -38,20 +38,21 @@ public class MainActivity extends AppCompatActivity {
         if (helper == null) {
             helper = new RouletteOpenHelper(MainActivity.this);
         }
+
         SQLiteDatabase db = helper.getWritableDatabase();
+        //helper.deleteAll(db); // DBを全て削除したい時用
         try {
-            Cursor c = db.rawQuery("select id, uuid, name from ROULETTE_TABLE where use = 1", null);
+            Cursor c = db.rawQuery("select id, name from ROULETTE_TABLE where use = 1", null);
             boolean next = c.moveToFirst();
             if (!next) {
-                String[] nameArray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-                String[] ratioArray = {"", "", "", "", "", "", "", "", "", ""};
-                        this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray); // testように3個
+                String[] nameArray = {"1", "2", "3", "4", "5", "6"};
+                String[] ratioArray = {"", "", "", "", "", ""};
+                this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
             } else {
-                String name = c.getString(2);
+                String name = c.getString(1);
                 TextView rouletteNameView = findViewById(R.id.roulette_name_view);
                 rouletteNameView.setText(name);
 
-                String uuid = c.getString(1);
                 ArrayList<String> nameList = new ArrayList<>();
                 ArrayList<String> ratioList = new ArrayList<>();
 
