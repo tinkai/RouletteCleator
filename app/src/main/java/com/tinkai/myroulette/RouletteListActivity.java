@@ -16,6 +16,7 @@ import android.widget.TwoLineListItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class RouletteListActivity extends AppCompatActivity {
     RouletteOpenHelper helper = null;
@@ -30,21 +31,16 @@ public class RouletteListActivity extends AppCompatActivity {
         }
 
         SQLiteDatabase db = helper.getWritableDatabase();
-        /* DB削除したい時用
-        db.execSQL("DROP TABLE IF EXISTS ROULETTE_TABLE");
-        for (int i = 0; i < 100; i++) {
-            Log.d("log", "=============" + i);
-            try {
-                db.execSQL("DROP TABLE IF EXISTS ROULETTE_ITEM_TABLE" + i);
-            } catch (Exception e) {
-                continue;
-            }
-        }
-        helper.onCreate(db);
-        */
+
         final ArrayList<RouletteInfo> rouletteList = new ArrayList<>();
         try {
-            Cursor c = db.rawQuery("select uuid, name, use from ROULETTE_TABLE order by id", null);
+            Cursor c = db.rawQuery("select * from ROULETTE_TABLE where id = 0", null);
+            // デフォルトのさいころを作成
+            if (!c.moveToFirst()) {
+                createDefaultRoulette(db);
+            }
+
+            c = db.rawQuery("select uuid, name from ROULETTE_TABLE order by id", null);
             boolean next = c.moveToFirst();
             while (next) {
                 RouletteInfo data = new RouletteInfo();
@@ -111,7 +107,17 @@ public class RouletteListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
+    private void createDefaultRoulette(SQLiteDatabase db) {
+        String uuid = UUID.randomUUID().toString();
+        db.execSQL("insert into ROULETTE_TABLE(id, uuid, name, use) VALUES('0', '" + uuid + "', 'Default Dice', '1')");
+        db.execSQL("CREATE TABLE ROULETTE_ITEM_TABLE0(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT, " +
+                "ratio TEXT)");
+        for (int i = 1; i <= 6; i++) {
+            db.execSQL("insert into ROULETTE_ITEM_TABLE0(name, ratio) VALUES('" + String.valueOf(i) + "', '')");
+        }
+    }
 }
