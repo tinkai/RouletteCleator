@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
             Cursor c = db.rawQuery("select id, uuid, name from ROULETTE_TABLE where use = 1", null);
             boolean next = c.moveToFirst();
             if (!next) {
-                String[] nameArray = {"1", "2", "3", "4", "5", "6"};
-                this.rouletteView = new RouletteView(this, resultView, 3); // testように3個
+                String[] nameArray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+                String[] ratioArray = {"10", "10", "10", "10", "10", "10", "10","10", "10", "10"};
+                        this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray); // testように3個
             } else {
                 String name = c.getString(2);
                 TextView rouletteNameView = findViewById(R.id.roulette_name_view);
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private final GestureDetector.SimpleOnGestureListener onGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            float vector = (float)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)));
+            float vector = (float)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) * 0.5);
 
             VectorRotateAnimation animation = new VectorRotateAnimation(rouletteView, vector);
             animation.setDuration(15000); // ミリ秒 15秒
