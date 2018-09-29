@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             boolean next = c.moveToFirst();
             if (!next) {
                 String[] nameArray = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-                String[] ratioArray = {"10", "10", "10", "10", "10", "10", "10","10", "10", "10"};
+                String[] ratioArray = {"", "", "", "", "", "", "", "", "", ""};
                         this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray); // testように3個
             } else {
                 String name = c.getString(2);

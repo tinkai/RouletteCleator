@@ -24,7 +24,7 @@ public class RouletteView extends View {
     //private final int color[] = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY,
       //      Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY}; // 仮設定
     private String name[];
-    private int ratio[];
+    private float ratio[];
     private int num; // 項目数
     private float angle[]; // 一つの項目の角度
     private float rotationAngle; // 回転した角度
@@ -43,11 +43,16 @@ public class RouletteView extends View {
         this(context, resultView);
         this.num = nameArray.length;
         this.name = nameArray;
-        this.ratio = new int[this.num];
+        this.ratio = new float[this.num];
         this.angle = new float[this.num];
         for (int i = 0; i < this.num; i++) {
-            this.ratio[i] = Integer.parseInt(ratioArray[i]);
-            this.angle[i] = 360 * Float.parseFloat(ratioArray[i]) / 100;
+            if (ratioArray[i].equals("")) {
+                this.ratio[i] = 100 / this.num;
+                this.angle[i] = 360 / (float)this.num;
+            } else {
+                this.ratio[i] = Float.parseFloat(ratioArray[i]);
+                this.angle[i] = 360 * this.ratio[i] / 100;
+            }
         }
     }
 
@@ -62,7 +67,6 @@ public class RouletteView extends View {
         // ルーレット描写
         float rotateAngle = this.rotationAngle;
         float sumAngle = (this.rotationAngle + 90) % 360;
-        //boolean isResult = true;
         for (int i = 0; i < this.num; i++) {
             this.paint.setColor(color[i]);
             canvas.drawArc(rectF, rotateAngle, this.angle[i], true, this.paint);
@@ -84,7 +88,7 @@ public class RouletteView extends View {
         path.close();
         canvas.drawPath(path,paint);
 
-        // ルーレットアイテム名表示 分離させないと変な表示になる
+        // ルーレットアイテム名表示
         for (int i = 0; i < this.num; i++) {
             float textAngle;
             if(i == 0) {

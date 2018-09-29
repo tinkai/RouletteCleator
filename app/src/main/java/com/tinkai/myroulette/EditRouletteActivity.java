@@ -256,6 +256,8 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private boolean isOkItemRatio() {
+        if (isAllEmptyRatio()) return true;
+
         int sum = 0;
         for (EditText ratioText : this.itemRatioList) {
             String ratio = String.valueOf(ratioText.getText());
@@ -272,6 +274,14 @@ public class EditRouletteActivity extends AppCompatActivity {
         // 合計が100か
         if (sum != 100) return false;
 
+        return true;
+    }
+
+    private boolean isAllEmptyRatio() {
+        for (EditText ratioText : this.itemRatioList) {
+            String ratio = String.valueOf(ratioText.getText());
+            if (!ratio.equals("")) return false;
+        }
         return true;
     }
 
