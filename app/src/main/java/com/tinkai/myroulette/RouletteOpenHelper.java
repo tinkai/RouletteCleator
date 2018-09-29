@@ -19,7 +19,6 @@ public class RouletteOpenHelper extends SQLiteOpenHelper {
                 "uuid TEXT, " +
                 "name TEXT, " +
                 "use INTEGER )");
-        //NOT NULL DEFAULT '0'
     }
 
     @Override
