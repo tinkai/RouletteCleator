@@ -116,7 +116,7 @@ public class RouletteListActivity extends AppCompatActivity {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, " +
                 "ratio TEXT)");
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 6; i >= 1; i--) {
             db.execSQL("insert into ROULETTE_ITEM_TABLE0(name, ratio) VALUES('" + String.valueOf(i) + "', '')");
         }
     }

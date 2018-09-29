@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             Cursor c = db.rawQuery("select id, name from ROULETTE_TABLE where use = 1", null);
             boolean next = c.moveToFirst();
             if (!next) {
-                String[] nameArray = {"1", "2", "3", "4", "5", "6"};
+                String[] nameArray = {"6", "5", "4", "3", "2", "1"};
                 String[] ratioArray = {"", "", "", "", "", ""};
                 this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
             } else {
