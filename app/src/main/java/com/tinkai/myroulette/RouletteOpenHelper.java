@@ -27,4 +27,17 @@ public class RouletteOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void deleteAll(SQLiteDatabase db) {
+        //DB削除したい時用
+        db.execSQL("DROP TABLE IF EXISTS ROULETTE_TABLE");
+        for (int i = 0; i < 100; i++) {
+            try {
+                db.execSQL("DROP TABLE IF EXISTS ROULETTE_ITEM_TABLE" + i);
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        onCreate(db);
+    }
+
 }
