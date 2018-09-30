@@ -28,6 +28,8 @@ public class EditRouletteActivity extends AppCompatActivity {
     private ArrayList<LinearLayout> itemList;
     private ArrayList<EditText> itemNameList;
     private ArrayList<EditText> itemRatioList;
+    private final int MAX_ITEM_NUM = 16;
+    private final int MIN_ITEM_NUM = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +155,7 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private void addItemList() {
-        if (this.itemList.size() >= 10) return;
+        if (this.itemList.size() >= MAX_ITEM_NUM) return;
 
         LinearLayout itemListLayout = findViewById(R.id.item_list);
 
@@ -196,7 +198,7 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     protected void deleteItemList() {
-        if (this.itemList.size() <= 2) return;
+        if (this.itemList.size() <= MIN_ITEM_NUM) return;
         int last = this.itemList.size()-1;
         this.itemNameList.remove(last);
         this.itemRatioList.remove(last);

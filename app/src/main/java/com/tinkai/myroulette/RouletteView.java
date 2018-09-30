@@ -19,10 +19,14 @@ public class RouletteView extends View {
     private Paint paint;
     private Paint textPaint;
     private TextView resultView;
-    private final int color[] = {Color.parseColor("#ff7a7a"), Color.parseColor("#7affff"), Color.parseColor("#ff7aff"), Color.parseColor("#7affbc"), Color.parseColor("#bc7aff"),
-            Color.parseColor("#7aff7a"), Color.parseColor("#7a7aff"), Color.parseColor("#bcff7a"), Color.parseColor("#7abcff"), Color.parseColor("#ffff7a")};
+    private final int color[] = { // 仮設定
+            Color.parseColor("#ff7a7a"), Color.parseColor("#7affff"), Color.parseColor("#ff7aff"), Color.parseColor("#7affbc"), Color.parseColor("#bc7aff"),
+            Color.parseColor("#7aff7a"), Color.parseColor("#7a7aff"), Color.parseColor("#bcff7a"), Color.parseColor("#7abcff"), Color.parseColor("#ffff7a"),
+            Color.parseColor("#ff7a7a"), Color.parseColor("#7affff"), Color.parseColor("#ff7aff"), Color.parseColor("#7affbc"), Color.parseColor("#bc7aff"),
+            Color.parseColor("#7aff7a"), Color.parseColor("#7a7aff"), Color.parseColor("#bcff7a"), Color.parseColor("#7abcff"), Color.parseColor("#ffff7a")
+    };
     //private final int color[] = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY,
-      //      Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY}; // 仮設定
+      //      Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.LTGRAY}; // 前の設定
     private String name[];
     private float ratio[];
     private int num; // 項目数
