@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +27,9 @@ public class EditRouletteActivity extends AppCompatActivity {
     RouletteOpenHelper helper = null;
     private boolean newFlag = false;
     private String id = "";
-    private ArrayList<LinearLayout> itemList;
-    private ArrayList<EditText> itemNameList;
-    private ArrayList<EditText> itemRatioList;
-    private final int MAX_ITEM_NUM = 16;
-    private final int MIN_ITEM_NUM = 2;
+
+    private LinearLayout itemListLayout;
+    private RouletteItemList rouletteItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +61,9 @@ public class EditRouletteActivity extends AppCompatActivity {
         }
 
         // itemList
-        this.itemList = new ArrayList<>();
-        this.itemNameList = new ArrayList<>();
-        this.itemRatioList = new ArrayList<>();
+        this.itemListLayout = findViewById(R.id.item_list_layout);
+        this.rouletteItemList = new RouletteItemList();
+
         if (id.equals("")) {
             addItemList();
         } else {
@@ -79,16 +79,13 @@ public class EditRouletteActivity extends AppCompatActivity {
                     String itemName = c.getString(0);
                     String itemRatio = c.getString(1);
                     addItemList();
-                    this.itemNameList.get(this.itemNameList.size()-1).setText(itemName, TextView.BufferType.NORMAL);
-                    this.itemRatioList.get(this.itemRatioList.size()-1).setText(itemRatio, TextView.BufferType.NORMAL);
+                    this.rouletteItemList.setItemText(this.rouletteItemList.getSize()-1, itemName, itemRatio);
                     next = c.moveToNext();
                 }
             } finally {
                 db.close();
             }
-
         }
-
 
         // Button
         Button addItemButton = findViewById(R.id.add_item_button);
@@ -111,13 +108,13 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isOkName()) {
+                if (!isValidName()) {
                     NameCautionDialog dialog = new NameCautionDialog();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
 
-                if (!isOkItemRatio()) {
+                if (!isValidItemRatio()) {
                     RatioCautionDialog dialog = new RatioCautionDialog();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
@@ -134,13 +131,13 @@ public class EditRouletteActivity extends AppCompatActivity {
         useButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isOkName()) {
+                if (!isValidName()) {
                     NameCautionDialog dialog = new NameCautionDialog();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
 
-                if (!isOkItemRatio()) {
+                if (!isValidItemRatio()) {
                     RatioCautionDialog dialog = new RatioCautionDialog();
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
@@ -155,55 +152,26 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private void addItemList() {
-        if (this.itemList.size() >= MAX_ITEM_NUM) return;
+        if (this.rouletteItemList.isOverMax()) return;
 
-        LinearLayout itemListLayout = findViewById(R.id.item_list);
+        View itemView = getLayoutInflater().inflate(R.layout.layout_item_row, null);
 
-        LinearLayout itemLayout = new LinearLayout(this);
-        itemLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-        itemLayout.setOrientation(LinearLayout.HORIZONTAL);
-        this.itemList.add(itemLayout);
+        EditText itemNameEditText = itemView.findViewById(R.id.item_name_edit_text);
+        EditText itemRatioEditText = itemView.findViewById(R.id.item_ratio_edit_text);
+        this.rouletteItemList.addItemList(itemNameEditText, itemRatioEditText);
 
-        TextView numText = new TextView(this);
-        String strNum = String.valueOf(this.itemList.size());
-        numText.setText(strNum + ".");
-        itemLayout.addView(numText, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                1
-        ));
+        TextView itemNumTextView = itemView.findViewById(R.id.item_num_text_view);
+        itemNumTextView.setText(String.valueOf(this.rouletteItemList.getSize()) + ".");
 
-        EditText nameEditText = new EditText(this);
-        nameEditText.setHint("Name");
-        itemLayout.addView(nameEditText, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                6
-        ));
-        this.itemNameList.add(nameEditText);
-
-        EditText ratioEditText = new EditText(this);
-        ratioEditText.setHint("Ratio");
-        itemLayout.addView(ratioEditText, new LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                2
-        ));
-        this.itemRatioList.add(ratioEditText);
-
-        itemListLayout.addView(itemLayout);
+        this.itemListLayout.addView(itemView);
     }
 
     protected void deleteItemList() {
-        if (this.itemList.size() <= MIN_ITEM_NUM) return;
-        int last = this.itemList.size()-1;
-        this.itemNameList.remove(last);
-        this.itemRatioList.remove(last);
-        this.itemList.get(last).removeAllViews();
-        this.itemList.remove(last);
+        if (this.rouletteItemList.isUnderMin()) return;
+
+        this.rouletteItemList.removeItemList(this.rouletteItemList.getSize()-1);
+
+        this.itemListLayout.removeViewAt(this.rouletteItemList.getSize());
     }
 
     protected void register() {
@@ -245,9 +213,9 @@ public class EditRouletteActivity extends AppCompatActivity {
 
     private void registerItemTable(SQLiteDatabase db, String rouletteID) {
         try {
-            for (int i = 0; i < this.itemNameList.size(); i++) {
-                String itemName = String.valueOf(this.itemNameList.get(i).getText());
-                String itemRatio = String.valueOf(this.itemRatioList.get(i).getText());
+            for (int i = 0; i < this.rouletteItemList.getSize(); i++) {
+                String itemName = this.rouletteItemList.getStringName(i);
+                String itemRatio = this.rouletteItemList.getStringRatio(i);
                 if (!itemName.equals("")) {
                     db.execSQL("insert into ROULETTE_ITEM_TABLE" + rouletteID + "(name, ratio) VALUES('" + itemName + "', '" + itemRatio + "')");
                 }
@@ -257,47 +225,53 @@ public class EditRouletteActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isOkItemRatio() {
+    private boolean isValidItemRatio() {
         if (isAllEmptyRatio()) return true;
 
-        int sum = 0;
-        for (EditText ratioText : this.itemRatioList) {
-            String ratio = String.valueOf(ratioText.getText());
+        int sumRatio = 0;
+        for (int i = 0; i < this.rouletteItemList.getSize(); i++) {
+            String ratio = this.rouletteItemList.getStringRatio(i);
             // 数字か
             try {
                 int num = Integer.parseInt(ratio);
                 if (num <= 0 || num >= 100) return false;
 
-                sum += num;
+                sumRatio += num;
             } catch (NumberFormatException e) {
                 return false;
             }
         }
         // 合計が100か
-        if (sum != 100) return false;
+        if (sumRatio != 100) return false;
 
         return true;
     }
 
     private boolean isAllEmptyRatio() {
-        for (EditText ratioText : this.itemRatioList) {
-            String ratio = String.valueOf(ratioText.getText());
+        for (int i = 0; i < this.rouletteItemList.getSize(); i++) {
+            String ratio = this.rouletteItemList.getStringRatio(i);
             if (!ratio.equals("")) return false;
         }
         return true;
     }
 
-    private boolean isOkName() {
+    private boolean isValidName() {
+        if (isValidRouletteName() && isValidItemName()) return true;
+        return false;
+    }
+
+    private boolean isValidRouletteName() {
         EditText rouletteNameText = findViewById(R.id.roulette_name_edit);
         String rouletteName = String.valueOf(rouletteNameText.getText());
         if (rouletteName.equals("")) return false;
-
-        for (EditText nameText : this.itemNameList) {
-            String name = String.valueOf(nameText.getText());
-            if (name.equals("")) return false;
-        }
-
         return true;
     }
 
+    private boolean isValidItemName() {
+        for (int i = 0; i < this.rouletteItemList.getSize(); i++) {
+            String name = this.rouletteItemList.getStringName(i);
+            if (name.equals("")) return false;
+        }
+        return true;
+    }
 }
