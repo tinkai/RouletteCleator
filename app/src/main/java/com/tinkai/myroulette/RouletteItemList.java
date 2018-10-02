@@ -14,7 +14,7 @@ public class RouletteItemList {
     private ArrayList<EditText> itemRatioList;
 
     private final int MIN_ITEM_NUM = 2;
-    private final int MAX_ITEM_NUM = 16;
+    private final int MAX_ITEM_NUM = 12;
 
     public RouletteItemList() {
         this.itemNameList = new ArrayList<>();
