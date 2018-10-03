@@ -30,9 +30,8 @@ public class RouletteListActivity extends AppCompatActivity {
             helper = new RouletteOpenHelper(RouletteListActivity.this);
         }
 
-        SQLiteDatabase db = helper.getWritableDatabase();
-
         final ArrayList<RouletteInfo> rouletteList = new ArrayList<>();
+        SQLiteDatabase db = helper.getWritableDatabase();
         try {
             Cursor c = db.rawQuery("select * from ROULETTE_TABLE where id = 0", null);
             // デフォルトのさいころを作成
@@ -55,10 +54,8 @@ public class RouletteListActivity extends AppCompatActivity {
             db.close();
         }
 
-        final RouletteListAdapter rouletteListAdapter = new RouletteListAdapter(this);
-        rouletteListAdapter.setRouletteList(rouletteList);
-
         ListView rouletteView = findViewById(R.id.roulette_list);
+        final RouletteListAdapter rouletteListAdapter = new RouletteListAdapter(this, R.layout.layout_roulette_row, rouletteList);
         rouletteView.setAdapter(rouletteListAdapter);
 
         rouletteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,7 +63,7 @@ public class RouletteListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.EditRouletteActivity.class);
 
-                RouletteInfo rouletteInfo = (RouletteInfo) rouletteListAdapter.getItem(position);
+                RouletteInfo rouletteInfo = rouletteListAdapter.getRouletteInfo(position);
                 String uuid = rouletteInfo.getUuid();
 
                 intent.putExtra("id", uuid);
@@ -77,7 +74,7 @@ public class RouletteListActivity extends AppCompatActivity {
         rouletteView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                RouletteInfo rouletteInfo = (RouletteInfo) rouletteListAdapter.getItem(position);
+                RouletteInfo rouletteInfo = rouletteListAdapter.getRouletteInfo(position);
                 String uuid = rouletteInfo.getUuid();
 
                 SQLiteDatabase db = helper.getWritableDatabase();

@@ -1,50 +1,67 @@
 package com.tinkai.myroulette;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.support.annotation.ArrayRes;
+import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class RouletteListAdapter extends BaseAdapter {
-    Context context;
-    LayoutInflater layoutInflater = null;
-    ArrayList<RouletteInfo> rouletteList;
+public class RouletteListAdapter extends ArrayAdapter<RouletteInfo> {
+    private LayoutInflater layoutInflater = null;
+    private ArrayList<RouletteInfo> rouletteList;
+    private static final float BUTTON_WIDTH_XP = 70f;
+    private int margin;
 
-    public RouletteListAdapter(Context context) {
-        this.context = context;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
+    private ArrayList<RouletteListPagerAdapter> a;
 
-    public void setRouletteList(ArrayList<RouletteInfo> rouletteList) {
+    public RouletteListAdapter(Context context, int resource, ArrayList<RouletteInfo> rouletteList) {
+        super(context, resource, rouletteList);
+        layoutInflater = LayoutInflater.from(context);
+
         this.rouletteList = rouletteList;
-    }
 
-    @Override
-    public int getCount() {
-        return this.rouletteList.size();
-    }
+        this.a = new ArrayList<>();
 
-    @Override
-    public Object getItem(int position) {
-        return this.rouletteList.get(position);
-    }
+        float density = getContext().getResources().getDisplayMetrics().density;
+        int buttonWidthPX = (int) (BUTTON_WIDTH_XP * density + 0.5f);
 
-    @Override
-    public long getItemId(int position) {
-        return this.rouletteList.get(position).getId();
+        WindowManager wm = (WindowManager)getContext().getSystemService(getContext().WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        Point realSize = new Point();
+        display.getRealSize(realSize);
+
+        this.margin = realSize.x - buttonWidthPX;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = layoutInflater.inflate(R.layout.layout_roulette_row, parent, false);
+        if(convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.layout_roulette_row, parent, false);
+        }
 
-        ((TextView)convertView.findViewById(R.id.roulette_list_name)).setText(rouletteList.get(position).getName());
+        ViewPager viewPager = convertView.findViewById(R.id.roulette_list_viewpager);
+        viewPager.setPageMargin(-margin);
+        RouletteListPagerAdapter adapter = new RouletteListPagerAdapter(getContext(), getItem(position));
+        viewPager.setAdapter(adapter);
+
+        this.a.add(adapter);
 
         return convertView;
+    }
+
+    public RouletteInfo getRouletteInfo(int pos) {
+        RouletteListPagerAdapter adapter = this.a.get(pos);
+        return adapter.getRouletteInfo();
     }
 
 }
