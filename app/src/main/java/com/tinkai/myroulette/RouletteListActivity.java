@@ -55,22 +55,9 @@ public class RouletteListActivity extends AppCompatActivity {
         }
 
         ListView rouletteView = findViewById(R.id.roulette_list);
-        final RouletteListAdapter rouletteListAdapter = new RouletteListAdapter(this, R.layout.layout_roulette_row, rouletteList);
+        final RouletteListAdapter rouletteListAdapter = new RouletteListAdapter(this, this, R.layout.layout_roulette_row, rouletteList);
         rouletteView.setAdapter(rouletteListAdapter);
-
-        rouletteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.EditRouletteActivity.class);
-
-                RouletteInfo rouletteInfo = rouletteListAdapter.getRouletteInfo(position);
-                String uuid = rouletteInfo.getUuid();
-
-                intent.putExtra("id", uuid);
-                startActivity(intent);
-            }
-        });
-
+        /*
         rouletteView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -94,6 +81,7 @@ public class RouletteListActivity extends AppCompatActivity {
                 return true;
             }
         });
+        */
 
         Button createButton = findViewById(R.id.create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -116,5 +104,14 @@ public class RouletteListActivity extends AppCompatActivity {
         for (int i = 6; i >= 1; i--) {
             db.execSQL("insert into ROULETTE_ITEM_TABLE0(name, ratio) VALUES('" + String.valueOf(i) + "', '')");
         }
+    }
+
+    public void startEditRouletteActivity(RouletteInfo info) {
+        Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.EditRouletteActivity.class);
+
+        String uuid = info.getUuid();
+
+        intent.putExtra("id", uuid);
+        startActivity(intent);
     }
 }
