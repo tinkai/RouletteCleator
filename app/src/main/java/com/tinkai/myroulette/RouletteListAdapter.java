@@ -1,5 +1,6 @@
 package com.tinkai.myroulette;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.ArrayRes;
@@ -20,16 +21,14 @@ public class RouletteListAdapter extends ArrayAdapter<RouletteInfo> {
     private ArrayList<RouletteInfo> rouletteList;
     private static final float BUTTON_WIDTH_XP = 70f;
     private int margin;
+    private RouletteListActivity rouletteListActivity;
 
-    private ArrayList<RouletteListPagerAdapter> a;
-
-    public RouletteListAdapter(Context context, int resource, ArrayList<RouletteInfo> rouletteList) {
+    public RouletteListAdapter(Context context, RouletteListActivity rouletteListActivity, int resource, ArrayList<RouletteInfo> rouletteList) {
         super(context, resource, rouletteList);
         layoutInflater = LayoutInflater.from(context);
 
+        this.rouletteListActivity =rouletteListActivity;
         this.rouletteList = rouletteList;
-
-        this.a = new ArrayList<>();
 
         float density = getContext().getResources().getDisplayMetrics().density;
         int buttonWidthPX = (int) (BUTTON_WIDTH_XP * density + 0.5f);
@@ -51,17 +50,9 @@ public class RouletteListAdapter extends ArrayAdapter<RouletteInfo> {
 
         ViewPager viewPager = convertView.findViewById(R.id.roulette_list_viewpager);
         viewPager.setPageMargin(-margin);
-        RouletteListPagerAdapter adapter = new RouletteListPagerAdapter(getContext(), getItem(position));
+        RouletteListPagerAdapter adapter = new RouletteListPagerAdapter(getContext(), this.rouletteListActivity, getItem(position));
         viewPager.setAdapter(adapter);
-
-        this.a.add(adapter);
 
         return convertView;
     }
-
-    public RouletteInfo getRouletteInfo(int pos) {
-        RouletteListPagerAdapter adapter = this.a.get(pos);
-        return adapter.getRouletteInfo();
-    }
-
 }
