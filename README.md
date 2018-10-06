@@ -11,9 +11,9 @@ DB:https://high-programmer.com/2017/09/04/android-studio-memo-app-4/#i-3 (2018/9
 アダプター:https://qiita.com/mizofumi0411/items/fd51dea947f2e65f534b (2018/9/24)  
 キャンバス:https://tech.recruit-mp.co.jp/mobile/remember_canvas1/ (2018/9/26)  
 基本的な12色のやつ:https://ironodata.info/ (2018/10/02)  
+ListViewのPager:http://yusuke-hata.hatenablog.com/entry/2014/01/16/021853 (2018/9/29)  
 
 ### 参考にしそうなURL
-ListViewのPager:http://yusuke-hata.hatenablog.com/entry/2014/01/16/021853 (2018/9/29)  
 EditTextの変更時に呼ばれるTextWatcher:https://akira-watson.com/android/textwatcher.html (2018/10/01)  
 上に同じ:http://www.autumn-color.com/archives/895 (2018/10/01)  
 カラー16進数:https://www.colordic.org/v/ (2018/9/26)  
