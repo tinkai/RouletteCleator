@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class RouletteListAdapter extends ArrayAdapter<RouletteInfo> {
     private LayoutInflater layoutInflater = null;
-    private ArrayList<RouletteInfo> rouletteList;
     private static final float BUTTON_WIDTH_XP = 70f;
     private int margin;
     private RouletteListActivity rouletteListActivity;
@@ -28,7 +27,6 @@ public class RouletteListAdapter extends ArrayAdapter<RouletteInfo> {
         layoutInflater = LayoutInflater.from(context);
 
         this.rouletteListActivity =rouletteListActivity;
-        this.rouletteList = rouletteList;
 
         float density = getContext().getResources().getDisplayMetrics().density;
         int buttonWidthPX = (int) (BUTTON_WIDTH_XP * density + 0.5f);
@@ -50,7 +48,7 @@ public class RouletteListAdapter extends ArrayAdapter<RouletteInfo> {
 
         ViewPager viewPager = convertView.findViewById(R.id.roulette_list_viewpager);
         viewPager.setPageMargin(-margin);
-        RouletteListPagerAdapter adapter = new RouletteListPagerAdapter(getContext(), this.rouletteListActivity, getItem(position));
+        RouletteListPagerAdapter adapter = new RouletteListPagerAdapter(getContext(), this.rouletteListActivity, getItem(position), position);
         viewPager.setAdapter(adapter);
 
         return convertView;
