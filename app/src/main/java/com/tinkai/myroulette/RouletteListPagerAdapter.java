@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,13 +18,15 @@ public class RouletteListPagerAdapter extends PagerAdapter {
     private static final int PAGE_NUM = 2;
     RouletteInfo rouletteInfo;
     RouletteListActivity rouletteListActivity;
+    int height;
 
-    public RouletteListPagerAdapter(Context context, RouletteListActivity rouletteListActivity, RouletteInfo rouletteInfo) {
+    public RouletteListPagerAdapter(Context context, RouletteListActivity rouletteListActivity, RouletteInfo rouletteInfo, int height) {
         super();
 
         this.rouletteListActivity = rouletteListActivity;
-        inflater = LayoutInflater.from(context);
+        this.inflater = LayoutInflater.from(context);
         this.rouletteInfo = rouletteInfo;
+        this.height =height;
     }
 
     @Override
@@ -40,8 +43,23 @@ public class RouletteListPagerAdapter extends PagerAdapter {
                     rouletteListActivity.startEditRouletteActivity(rouletteInfo);
                 }
             });
+
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    rouletteListActivity.setUseRoulette(rouletteInfo);
+                    return true;
+                }
+            });
         }else{
             layout = (LinearLayout)inflater.inflate(R.layout.roulette_row_page2, null);
+            Button deleteButton = layout.findViewById(R.id.roulette_delete_button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rouletteListActivity.deleteRoulette(rouletteInfo, height);
+                }
+            });
         }
 
         container.addView(layout);
