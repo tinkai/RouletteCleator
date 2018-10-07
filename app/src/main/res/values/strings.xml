@@ -1,3 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MyRoulette</string>
+
+    <string name="roulette_name">Roulette Name</string>
+    <string name="result">Result</string>
+    <string name="Setting">Setting</string>
+
+    <string name="new_create">New Create</string>
+
+    <string name="delete">Delete</string>
+
+    <string name="name">Name</string>
+    <string name="add">Add</string>
+    <string name="item">Item</string>
+    <string name="register">Register</string>
+    <string name="use">Use</string>
+
+    <string name="ratio">Ratio</string>
 </resources>

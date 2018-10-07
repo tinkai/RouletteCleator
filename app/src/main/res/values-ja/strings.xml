@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyRoulette</string>
+
+    <string name="roulette_name">ルーレット名</string>
+    <string name="result">結果</string>
+    <string name="Setting">設定</string>
+
+    <string name="new_create">新規作成</string>
+
+    <string name="delete">削除</string>
+
+    <string name="name">名前</string>
+    <string name="add">追加</string>
+    <string name="item">項目</string>
+    <string name="register">登録</string>
+    <string name="use">使用</string>
+
+    <string name="ratio">割合</string>
+</resources>
