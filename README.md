@@ -12,6 +12,7 @@ DB:https://high-programmer.com/2017/09/04/android-studio-memo-app-4/#i-3 (2018/9
 キャンバス:https://tech.recruit-mp.co.jp/mobile/remember_canvas1/ (2018/9/26)  
 基本的な12色のやつ:https://ironodata.info/ (2018/10/02)  
 ListViewのPager:http://yusuke-hata.hatenablog.com/entry/2014/01/16/021853 (2018/9/29)  
+stringファイルによる言語変化:https://akira-watson.com/android/localize.html (2018/10/07)  
 
 ### 参考にしそうなURL
 EditTextの変更時に呼ばれるTextWatcher:https://akira-watson.com/android/textwatcher.html (2018/10/01)  
