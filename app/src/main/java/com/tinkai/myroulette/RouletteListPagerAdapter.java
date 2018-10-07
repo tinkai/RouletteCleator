@@ -34,7 +34,7 @@ public class RouletteListPagerAdapter extends PagerAdapter {
         LinearLayout layout;
         if(position == 0){
             layout = (LinearLayout)inflater.inflate(R.layout.roulette_row_page1, null);
-            TextView text = layout.findViewById(R.id.roulette_list_name);
+            TextView text = layout.findViewById(R.id.roulette_name_text_view);
             text.setText(rouletteInfo.getName());
 
             layout.setOnClickListener(new View.OnClickListener() {

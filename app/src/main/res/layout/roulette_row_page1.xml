@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/roulette_list_name"
+        android:id="@+id/roulette_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:singleLine="true"

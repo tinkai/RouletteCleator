@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         this.gestureDetector = new GestureDetector(this, this.onGestureListener);
 
         LinearLayout rouletteLayout = findViewById(R.id.roulette_layout);
-        TextView resultView = findViewById(R.id.result_view);
+        TextView resultView = findViewById(R.id.result_text_view);
 
         if (helper == null) {
             helper = new RouletteOpenHelper(MainActivity.this);
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
             } else {
                 String name = c.getString(1);
-                TextView rouletteNameView = findViewById(R.id.roulette_name_view);
+                TextView rouletteNameView = findViewById(R.id.roulette_name_text_view);
                 rouletteNameView.setText(name);
 
                 ArrayList<String> nameList = new ArrayList<>();

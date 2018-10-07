@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/roulette_name_view"
+        android:id="@+id/roulette_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -18,7 +18,7 @@
         android:textSize="24sp"/>
 
     <TextView
-        android:id="@+id/result_view"
+        android:id="@+id/result_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -32,7 +32,6 @@
         android:layout_height="0dp"
         android:layout_weight="9"
         android:orientation="vertical">
-
     </LinearLayout>
 
     <Button

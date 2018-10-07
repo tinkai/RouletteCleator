@@ -53,7 +53,7 @@ public class EditRouletteActivity extends AppCompatActivity {
                 Cursor c = db.rawQuery("select name from ROULETTE_TABLE where uuid = '" + id + "'", null);
                 c.moveToFirst();
                 String name = c.getString(0);
-                EditText nameEdit = findViewById(R.id.roulette_name_edit);
+                EditText nameEdit = findViewById(R.id.roulette_name_edit_text);
                 nameEdit.setText(name, TextView.BufferType.NORMAL);
             } finally {
                 db.close();
@@ -88,7 +88,7 @@ public class EditRouletteActivity extends AppCompatActivity {
         }
 
         // Button
-        Button addItemButton = findViewById(R.id.add_item_button);
+        Button addItemButton = findViewById(R.id.add_button);
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +175,7 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     protected void register() {
-        EditText nameEdit = findViewById(R.id.roulette_name_edit);
+        EditText nameEdit = findViewById(R.id.roulette_name_edit_text);
         String name = nameEdit.getText().toString();
 
         // DB登録
@@ -261,7 +261,7 @@ public class EditRouletteActivity extends AppCompatActivity {
     }
 
     private boolean isValidRouletteName() {
-        EditText rouletteNameText = findViewById(R.id.roulette_name_edit);
+        EditText rouletteNameText = findViewById(R.id.roulette_name_edit_text);
         String rouletteName = String.valueOf(rouletteNameText.getText());
         if (rouletteName.equals("")) return false;
         return true;

@@ -56,7 +56,7 @@ public class RouletteListActivity extends AppCompatActivity {
             db.close();
         }
 
-        ListView rouletteView = findViewById(R.id.roulette_list);
+        ListView rouletteView = findViewById(R.id.roulette_list_view);
         this.rouletteListAdapter = new RouletteListAdapter(this, this, R.layout.layout_roulette_row, rouletteList);
         rouletteView.setAdapter(this.rouletteListAdapter);
 
