@@ -6,14 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.support.annotation.ColorRes;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 public class RouletteView extends View {
     private Paint paint;

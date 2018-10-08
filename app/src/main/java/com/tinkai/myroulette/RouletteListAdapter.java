@@ -1,9 +1,7 @@
 package com.tinkai.myroulette;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
-import android.support.annotation.ArrayRes;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -11,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
