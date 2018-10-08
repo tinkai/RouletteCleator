@@ -20,6 +20,8 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private GestureDetector gestureDetector; // フリックとか判定するやつ
@@ -46,36 +48,39 @@ public class MainActivity extends AppCompatActivity {
             Cursor c = db.rawQuery("select id, name from ROULETTE_TABLE where use = 1", null);
             boolean next = c.moveToFirst();
             if (!next) {
-                String[] nameArray = {"6", "5", "4", "3", "2", "1"};
-                String[] ratioArray = {"", "", "", "", "", ""};
-                this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
-            } else {
-                String name = c.getString(1);
-                TextView rouletteNameView = findViewById(R.id.roulette_name_text_view);
-                rouletteNameView.setText(name);
-
-                ArrayList<String> nameList = new ArrayList<>();
-                ArrayList<String> ratioList = new ArrayList<>();
-
-                String rouletteID = String.valueOf(c.getInt(0));
-                c = db.rawQuery("select name, ratio from ROULETTE_ITEM_TABLE" + rouletteID, null);
-                boolean nextItem = c.moveToFirst();
-                while (nextItem) {
-                    String itemName = c.getString(0);
-                    String itemRatio = c.getString(1);
-                    nameList.add(itemName);
-                    ratioList.add(itemRatio);
-                    nextItem = c.moveToNext();
+                c = db.rawQuery("select id, name from ROULETTE_TABLE where id = 0", null);
+                boolean isDefaultRoulette = c.moveToFirst();
+                if (!isDefaultRoulette) {
+                    createDefaultRoulette(db);
+                    c = db.rawQuery("select id, name from ROULETTE_TABLE where id = 0", null);
+                    c.moveToFirst();
                 }
-
-                String[] nameArray = new String[nameList.size()];
-                String[] ratioArray = new String[ratioList.size()];
-                for (int i = 0; i < nameList.size(); i++) {
-                    nameArray[i] = nameList.get(i);
-                    ratioArray[i] = ratioList.get(i);
-                }
-                this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
             }
+            String name = c.getString(1);
+            TextView rouletteNameView = findViewById(R.id.roulette_name_text_view);
+            rouletteNameView.setText(name);
+
+            ArrayList<String> nameList = new ArrayList<>();
+            ArrayList<String> ratioList = new ArrayList<>();
+
+            String rouletteID = String.valueOf(c.getInt(0));
+            c = db.rawQuery("select name, ratio from ROULETTE_ITEM_TABLE" + rouletteID, null);
+            boolean nextItem = c.moveToFirst();
+            while (nextItem) {
+                String itemName = c.getString(0);
+                String itemRatio = c.getString(1);
+                nameList.add(itemName);
+                ratioList.add(itemRatio);
+                nextItem = c.moveToNext();
+            }
+
+            String[] nameArray = new String[nameList.size()];
+            String[] ratioArray = new String[ratioList.size()];
+            for (int i = 0; i < nameList.size(); i++) {
+                nameArray[i] = nameList.get(i);
+                ratioArray[i] = ratioList.get(i);
+            }
+            this.rouletteView = new RouletteView(this, resultView, nameArray, ratioArray);
         } finally {
             db.close();
         }
@@ -113,4 +118,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void createDefaultRoulette(SQLiteDatabase db) {
+        String uuid = UUID.randomUUID().toString();
+        String name;
+        Locale locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        if (lang.equals("ja")) {
+            name = "普通のサイコロ";
+        } else {
+            name = "Default Dice";
+        }
+        db.execSQL("insert into ROULETTE_TABLE(id, uuid, name, use) VALUES('0', '" + uuid + "', '" + name + "', '1')");
+        db.execSQL("CREATE TABLE ROULETTE_ITEM_TABLE0(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT, " +
+                "ratio TEXT)");
+        for (int i = 6; i >= 1; i--) {
+            db.execSQL("insert into ROULETTE_ITEM_TABLE0(name, ratio) VALUES('" + String.valueOf(i) + "', '')");
+        }
+    }
 }

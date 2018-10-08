@@ -16,6 +16,7 @@ import android.widget.TwoLineListItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 public class RouletteListActivity extends AppCompatActivity {
@@ -73,7 +74,15 @@ public class RouletteListActivity extends AppCompatActivity {
 
     private void createDefaultRoulette(SQLiteDatabase db) {
         String uuid = UUID.randomUUID().toString();
-        db.execSQL("insert into ROULETTE_TABLE(id, uuid, name, use) VALUES('0', '" + uuid + "', 'Default Dice', '1')");
+        String name;
+        Locale locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        if (lang.equals("ja")) {
+            name = "普通のサイコロ";
+        } else {
+            name = "Default Dice";
+        }
+        db.execSQL("insert into ROULETTE_TABLE(id, uuid, name, use) VALUES('0', '" + uuid + "', '" + name + "', '1')");
         db.execSQL("CREATE TABLE ROULETTE_ITEM_TABLE0(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, " +
