@@ -99,14 +99,19 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isValidName()) {
-                    NameCautionDialog dialog = new NameCautionDialog();
+                if (!isValidRouletteName()) {
+                    CautionDialog dialog = new CautionDialog(0);
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
+                if (!isValidItemName()) {
+                    CautionDialog dialog = new CautionDialog(1);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
 
                 if (!isValidItemRatio()) {
-                    RatioCautionDialog dialog = new RatioCautionDialog();
+                    CautionDialog dialog = new CautionDialog(2);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
@@ -122,14 +127,19 @@ public class EditRouletteActivity extends AppCompatActivity {
         useButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isValidName()) {
-                    NameCautionDialog dialog = new NameCautionDialog();
+                if (!isValidRouletteName()) {
+                    CautionDialog dialog = new CautionDialog(0);
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                }
+                if (!isValidItemName()) {
+                    CautionDialog dialog = new CautionDialog(1);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
 
                 if (!isValidItemRatio()) {
-                    RatioCautionDialog dialog = new RatioCautionDialog();
+                    CautionDialog dialog = new CautionDialog(2);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
                 }
@@ -244,11 +254,6 @@ public class EditRouletteActivity extends AppCompatActivity {
             if (!ratio.equals("")) return false;
         }
         return true;
-    }
-
-    private boolean isValidName() {
-        if (isValidRouletteName() && isValidItemName()) return true;
-        return false;
     }
 
     private boolean isValidRouletteName() {
