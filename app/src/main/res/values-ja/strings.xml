@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyRoulette</string>
+    <string name="app_name">マイルーレット</string>
 
     <string name="roulette_name">ルーレット名</string>
     <string name="result">結果</string>
-    <string name="Setting">設定</string>
+    <string name="setting">設定</string>
 
     <string name="new_create">新規作成</string>
 
