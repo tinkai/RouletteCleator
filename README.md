@@ -20,3 +20,4 @@ EditTextの変更時に呼ばれるTextWatcher:https://akira-watson.com/android/
 カラー16進数:https://www.colordic.org/v/ (2018/9/26)  
 おしゃれな配色のやつ:http://www.hp-stylelink.com/news/2013/07/20130708.php (2018/10/02)  
 フリックリスナーの作り方:https://www.ohmyenter.com/flick-listener-in-android-dev/ (2018/10/04)  
+アイコンの作成asset:https://akira-watson.com/android/adaptive-icons.html (2018/10/10)  
