@@ -17,10 +17,10 @@ public class CautionDialog extends DialogFragment {
         Locale locale = Locale.getDefault();
         String lang = locale.getLanguage();
         if (lang.equals("ja")) {
-            this.title = "警告";
+            this.title = "エラー";
             selectMessageJapan(id);
         } else {
-            this.title = "Caution";
+            this.title = "Error";
             selectMessageDefault(id);
         }
     }
@@ -36,6 +36,9 @@ public class CautionDialog extends DialogFragment {
             case 2:
                 this.message = "アイテム確率が適切ではありません。\nアイテム確率を確認してください。";
                 break;
+            case 3:
+                this.message = "アイテムが2個以下です。\nアイテムを追加してください。";
+                break;
         }
     }
 
@@ -49,6 +52,9 @@ public class CautionDialog extends DialogFragment {
                 break;
             case 2:
                 this.message = "Item probability is not appropriate.\nPlease check item probability.";
+                break;
+            case 3:
+                this.message = "There are no more than 2 items.\nPlease add items\n.";
                 break;
         }
     }

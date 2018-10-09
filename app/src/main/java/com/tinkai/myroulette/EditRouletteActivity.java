@@ -99,18 +99,19 @@ public class EditRouletteActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isValidRouletteName()) {
+                if (!isValidItemNum()) {
+                    CautionDialog dialog = new CautionDialog(3);
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                } else if (!isValidRouletteName()) {
                     CautionDialog dialog = new CautionDialog(0);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
-                }
-                if (!isValidItemName()) {
+                } else if (!isValidItemName()) {
                     CautionDialog dialog = new CautionDialog(1);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
-                }
-
-                if (!isValidItemRatio()) {
+                } else if (!isValidItemRatio()) {
                     CautionDialog dialog = new CautionDialog(2);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
@@ -127,18 +128,19 @@ public class EditRouletteActivity extends AppCompatActivity {
         useButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isValidRouletteName()) {
+                if (!isValidItemNum()) {
+                    CautionDialog dialog = new CautionDialog(3);
+                    dialog.show(getSupportFragmentManager(), "caution");
+                    return;
+                } else if (!isValidRouletteName()) {
                     CautionDialog dialog = new CautionDialog(0);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
-                }
-                if (!isValidItemName()) {
+                } else if (!isValidItemName()) {
                     CautionDialog dialog = new CautionDialog(1);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
-                }
-
-                if (!isValidItemRatio()) {
+                } else if (!isValidItemRatio()) {
                     CautionDialog dialog = new CautionDialog(2);
                     dialog.show(getSupportFragmentManager(), "caution");
                     return;
@@ -269,5 +271,9 @@ public class EditRouletteActivity extends AppCompatActivity {
             if (name.equals("")) return false;
         }
         return true;
+    }
+
+    private boolean isValidItemNum() {
+        return this.rouletteItemList.getSize() >= 2;
     }
 }
