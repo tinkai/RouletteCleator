@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class EditRouletteActivity extends AppCompatActivity {
@@ -26,6 +27,15 @@ public class EditRouletteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_roulette);
+
+        // タイトルテキスト
+        Locale locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        if (lang.equals("ja")) {
+            setTitle("ルーレット編集");
+        } else {
+            setTitle("Edit Roulette");
+        }
 
         // DB
         if (helper == null) {

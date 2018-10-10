@@ -24,6 +24,15 @@ public class RouletteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roulette_list);
 
+        // タイトルテキスト
+        Locale locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        if (lang.equals("ja")) {
+            setTitle("ルーレットリスト");
+        } else {
+            setTitle("Roulette List");
+        }
+
         if (helper == null) {
             helper = new RouletteOpenHelper(RouletteListActivity.this);
         }
