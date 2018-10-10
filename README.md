@@ -13,6 +13,7 @@ DB:https://high-programmer.com/2017/09/04/android-studio-memo-app-4/#i-3 (2018/9
 基本的な12色のやつ:https://ironodata.info/ (2018/10/02)  
 ListViewのPager:http://yusuke-hata.hatenablog.com/entry/2014/01/16/021853 (2018/9/29)  
 stringファイルによる言語変化:https://akira-watson.com/android/localize.html (2018/10/07)  
+アイコンの作成asset:https://akira-watson.com/android/adaptive-icons.html (2018/10/10)  
 
 ### 参考にしそうなURL
 EditTextの変更時に呼ばれるTextWatcher:https://akira-watson.com/android/textwatcher.html (2018/10/01)  
@@ -20,4 +21,3 @@ EditTextの変更時に呼ばれるTextWatcher:https://akira-watson.com/android/
 カラー16進数:https://www.colordic.org/v/ (2018/9/26)  
 おしゃれな配色のやつ:http://www.hp-stylelink.com/news/2013/07/20130708.php (2018/10/02)  
 フリックリスナーの作り方:https://www.ohmyenter.com/flick-listener-in-android-dev/ (2018/10/04)  
-アイコンの作成asset:https://akira-watson.com/android/adaptive-icons.html (2018/10/10)  
