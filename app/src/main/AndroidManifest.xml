@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RouletteListActivity" />
-        <activity android:name=".EditRouletteActivity"></activity>
+        <activity android:name=".EditRouletteActivity"/>
     </application>
 
 </manifest>
