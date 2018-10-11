@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.util.Log;
 import android.widget.EditText;

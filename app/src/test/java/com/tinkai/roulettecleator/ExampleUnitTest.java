@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import org.junit.Test;
 

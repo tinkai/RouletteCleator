@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -129,7 +129,7 @@ public class EditRouletteActivity extends AppCompatActivity {
 
                 register();
 
-                Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.myroulette.RouletteListActivity.class);
+                Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.roulettecleator.RouletteListActivity.class);
                 startActivity(intent);
             }
         });
@@ -158,7 +158,7 @@ public class EditRouletteActivity extends AppCompatActivity {
 
                 register();
 
-                Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.myroulette.MainActivity.class);
+                Intent intent = new Intent(EditRouletteActivity.this, com.tinkai.roulettecleator.MainActivity.class);
                 startActivity(intent);
             }
         });

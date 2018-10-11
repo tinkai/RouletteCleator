@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

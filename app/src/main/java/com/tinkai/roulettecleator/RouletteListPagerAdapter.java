@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

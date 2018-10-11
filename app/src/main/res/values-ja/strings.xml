@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">マイルーレット</string>
+    <string name="app_name">ルーレットクリエイター</string>
 
     <string name="roulette_name">ルーレット名</string>
     <string name="result">結果</string>

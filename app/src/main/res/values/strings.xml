@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyRoulette</string>
+    <string name="app_name">Roulette Creator</string>
 
     <string name="roulette_name">Roulette Name</string>
     <string name="result">Result</string>

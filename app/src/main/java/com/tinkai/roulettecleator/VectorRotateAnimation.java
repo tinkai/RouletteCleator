@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.view.animation.Animation;
 import android.view.animation.Transformation;

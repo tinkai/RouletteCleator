@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, com.tinkai.myroulette.RouletteListActivity.class);
+                Intent intent = new Intent(MainActivity.this, com.tinkai.roulettecleator.RouletteListActivity.class);
                 startActivity(intent);
             }
         });

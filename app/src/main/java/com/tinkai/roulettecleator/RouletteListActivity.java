@@ -1,4 +1,4 @@
-package com.tinkai.myroulette;
+package com.tinkai.roulettecleator;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -69,7 +69,7 @@ public class RouletteListActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.EditRouletteActivity.class);
+                Intent intent = new Intent(RouletteListActivity.this, com.tinkai.roulettecleator.EditRouletteActivity.class);
                 intent.putExtra("id", "");
                 startActivity(intent);
             }
@@ -97,7 +97,7 @@ public class RouletteListActivity extends AppCompatActivity {
     }
 
     public void startEditRouletteActivity(RouletteInfo info) {
-        Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.EditRouletteActivity.class);
+        Intent intent = new Intent(RouletteListActivity.this, com.tinkai.roulettecleator.EditRouletteActivity.class);
 
         String uuid = info.getUuid();
 
@@ -115,7 +115,7 @@ public class RouletteListActivity extends AppCompatActivity {
             db.close();
         }
 
-        Intent intent = new Intent(RouletteListActivity.this, com.tinkai.myroulette.MainActivity.class);
+        Intent intent = new Intent(RouletteListActivity.this, com.tinkai.roulettecleator.MainActivity.class);
         startActivity(intent);
     }
 
