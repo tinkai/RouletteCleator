@@ -1,7 +1,8 @@
-# MyRoulette
+# RouletteCleator
 ルーレットを任意の割合で作成することができるアプリ  
 開始日:2018/9/20  
 開発環境:Windows10  
+元アプリ名:MyRoulette  
 
 ### 参考URL
 ルーレットと基礎:http://www.s-watanabe.work/article/453712659.html (2018/9/20)  
