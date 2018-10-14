@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private final GestureDetector.SimpleOnGestureListener onGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            float vector = (float)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) * 0.5);
+            float vector = (float)(Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) * 0.1);
 
             VectorRotateAnimation animation = new VectorRotateAnimation(rouletteView, vector);
             animation.setDuration(15000); // ミリ秒 15秒
