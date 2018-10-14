@@ -93,7 +93,9 @@ public class RouletteView extends View {
                 textAngle = (this.angle[i-1] + this.angle[i]) / 2;
             }
             canvas.rotate(textAngle, centerX, centerY);
-            canvas.drawText(this.name[i], centerX - 30, centerY - 3*radius/5, this.textPaint);
+
+            int halfSize = getStringLength(this.name[i]) / 2;
+            canvas.drawText(this.name[i], centerX - 40 * halfSize, centerY - 3*radius/5, this.textPaint);
         }
     }
 
@@ -101,4 +103,18 @@ public class RouletteView extends View {
         this.rotationAngle += rotation;
     }
 
+    public static int getStringLength(String str) {
+        int length = 0;
+
+        //全角半角判定
+        char[] c = str.toCharArray();
+        for(int i=0;i<c.length;i++) {
+            if(String.valueOf(c[i]).getBytes().length <= 1){
+                length += 1; //半角文字なら＋１
+            }else{
+                length += 2; //全角文字なら＋２
+            }
+        }
+        return length;
+    }
 }
