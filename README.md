@@ -17,7 +17,8 @@ ListViewのPager:http://yusuke-hata.hatenablog.com/entry/2014/01/16/021853 (2018
 stringファイルによる言語変化:https://akira-watson.com/android/localize.html (2018/10/07)  
 アイコンの作成asset:https://akira-watson.com/android/adaptive-icons.html (2018/10/10)  
 半角・全角を区別して文字の長さを求めるメソッド:https://blog.java-reference.com/common-get-zen2han1/ (2018/10/14)  
-アプリリリース手順:https://akira-watson.com/android/apk.html (2018/10/21)  
+アプリビルド手順:https://akira-watson.com/android/apk.html (2018/10/21)  
+アプリリリース手順:https://akira-watson.com/android/developer-console.html#2 (2018/10/21)  
 
 ### 参考にしそうなURL
 EditTextの変更時に呼ばれるTextWatcher:https://akira-watson.com/android/textwatcher.html (2018/10/01)  
